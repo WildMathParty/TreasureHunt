@@ -10,12 +10,22 @@ local scene = composer.newScene()
 
 local currentQuestion
 local questionsAnswers = {
-    {"test1", "testA"},
-    {"test2", "testB"},
-    {"test3", "testC"}
+    {"test1", "testA", "string"}, 
+    {"test2", "testB", "multi"},
+    {"test3", "testC", "wheel"}
 }
 local questionText
 local answerInput
+
+local function createString()
+    print("wow")
+end
+
+local questionTypeSwitch = {
+    ["string"] = createString,
+    ["multi"] = createString,
+    ["wheel"] = createString
+}
 
 local function createQuestion(sceneGroup)
     questionText = display.newText({
@@ -31,7 +41,8 @@ local function createQuestion(sceneGroup)
 end
 
 local function askQuestion()
-    questionText.text = questionsAnswers[currentQuestion][1]
+
+    --questionText.text = questionsAnswers[currentQuestion][1]
 end 
 
 local function createTextField()
@@ -82,6 +93,13 @@ function scene:show( event )
  
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
+
+        for i=1, #questionsAnswers do
+            questionTypeSwitch[questionsAnswers[i][3]]()
+        end
+        -- Loops through every question, gets the third value from the questionsAnswers table which is a string of what type
+        -- of question it is. Then goes to the switch table and runs the function saved under that type's name
+
         currentQuestion = 1
         askQuestion()
         createTextField()
